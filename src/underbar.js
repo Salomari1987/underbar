@@ -100,7 +100,7 @@
   _.uniq = function(array) {
     var newArray = [];
     _.each(array, function (element) {
-      if(_.indexOf(newArray, element) < 0)
+      if(_.indexOf(newArray, element) === -1)
         newArray.push(element);
     })
     return newArray;
@@ -305,6 +305,9 @@
     };
   };
 
+
+
+
   // Memorize an expensive function's results by storing them. You may assume
   // that the function only takes primitives as arguments.
   // memoize could be renamed to oncePerUniqueArgumentList; memoize does the
@@ -314,6 +317,21 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    var result = [];
+    var memorize = [];
+    var check;
+
+    return function() {
+      var args = Array.prototype.slice.call(arguments);
+      args = args.join('');
+      check =_.indexOf(memorize, args)
+      if (check < 0) {
+        memorize.push(args);
+        check =_.indexOf(memorize, args)
+        result[check]=func.apply(this, arguments);
+      }
+      return result[check];
+    };
   };
 
   // Delays a function for the given number of milliseconds, and then calls
