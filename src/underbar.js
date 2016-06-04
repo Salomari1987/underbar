@@ -341,8 +341,11 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    [].shift.apply(arguments);
+    [].shift.apply(arguments);
+    var newArray = arguments;
+    setTimeout(function(){func.apply(null,newArray)}, wait);
   };
-
 
   /**
    * ADVANCED COLLECTION OPERATIONS
