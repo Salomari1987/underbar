@@ -216,13 +216,13 @@
     } else {return false;} 
 */
     var bol = false;
-    _.every(collection,function(item){
+    _.every(collection,function(element){
       if(iterator !== undefined){
-        if(iterator(item)) {
+        if(iterator(element)) {
           bol = true;
         }
       }else {
-          if(item) 
+          if(element) 
            bol = true;
         }
     })
@@ -323,7 +323,7 @@
 
     return function() {
       var args = Array.prototype.slice.call(arguments);
-      args = args.join('');
+      args = JSON.stringify(args);
       check =_.indexOf(memorize, args)
       if (check < 0) {
         memorize.push(args);
@@ -357,7 +357,18 @@
   // TIP: This function's test suite will ask that you not modify the original
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
+  function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+  }
   _.shuffle = function(array) {
+    var array2 = array.slice()
+    _.each(array2, function(element, key){
+      var swap = array2[key];
+      var rand = getRandomInt(0,array.length-1)
+      array2[key] = array2[rand];
+      array2[rand] = swap;
+    })
+    return array2;
   };
 
 
