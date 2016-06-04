@@ -164,11 +164,10 @@
     if(accumulator === undefined) {
       accumulator = newArray.shift();
     }
-    var result = accumulator;
     _.each(newArray, function (element, i) {
-      result = iterator (result, element)
+      accumulator = iterator (accumulator, element)
     })
-    return result;
+    return accumulator;
   };
 
   // Determine if the array or object contains a given value (using `===`).
@@ -198,17 +197,37 @@
       return true;
     } else {return false;}
 
+
+
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
-    var flag = false;
-    if (iterator === undefined){
-      iterator === _.identity(collection)
-    }
-    flag = !_.every(collection, iterator)
+    /*if (_.filter(collection, function (element, i) {
+      if(iterator !== undefined){
+        return iterator(element);
+      } else {
+        return element;
+      }
+    }).length > 0){
+      return true;
+    } else {return false;} 
+*/
+    var bol = false;
+    _.every(collection,function(item){
+      if(iterator !== undefined){
+        if(iterator(item)) {
+          bol = true;
+        }
+      }else {
+          if(item) 
+           bol = true;
+        }
+    })
+     
+    return bol;
   };
 
 
@@ -231,15 +250,27 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
-    var newObj = {};
-    _.each(obj, function (element, key) {
-        newObj[key] = element[key];
+    [].shift.apply(arguments);
+    _.each(arguments, function (object, i) {
+        _.each(object, function (element, key) {
+            obj[key] = object[key];
+        })
     })
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    [].shift.apply(arguments);
+    _.each(arguments, function (object, i) {
+        _.each(object, function (element, key) {
+          if(!(_.indexOf(Object.keys(obj),key) >= 0))
+            obj[key] = object[key];
+        })
+    })
+    return obj;
+  
   };
 
 
