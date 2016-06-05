@@ -472,11 +472,30 @@
   //
   // Hint: Use Array.isArray to check if something is an array
   _.flatten = function(nestedArray, result) {
-  };
+    var newArray = [];
+    _.each(nestedArray, function (element, index) {
+      if (Array.isArray(nestedArray[index])) {
+        newArray = newArray.concat(_.flatten(nestedArray[index]));
+      } else {
+        newArray.push(element);
+      } 
+    })
+    return newArray;
+ };
 
   // Takes an arbitrary number of arrays and produces an array that contains
   // every item shared between all the passed-in arrays.
   _.intersection = function() {
+    var intersect = [];
+    var args = [].slice.call(arguments,1);
+    _.each(arguments[0], function (element,index) {
+      if (_.every(args, function(e,i){
+        return _.indexOf(e,element) !== -1;
+      })){
+        intersect.push(element);
+      }
+    })
+    return intersect;
   };
 
   // Take the difference between one array and a number of other arrays.
