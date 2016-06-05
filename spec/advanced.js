@@ -95,7 +95,6 @@
 
       it('can flatten nested arrays', function() {
         var nestedArray = [1, [2], [3, [[[4]]]]];
-
         expect(_.flatten(nestedArray)).to.eql([1,2,3,4]);
       });
     });
@@ -118,6 +117,7 @@
 
     describe('intersection', function() {
       checkForNativeMethods(function() {
+
         _.intersection(['moe', 'curly', 'larry'], ['moe', 'groucho'])
       });
 
