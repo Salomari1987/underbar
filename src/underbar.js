@@ -400,25 +400,39 @@
   // of that string. For example, _.sortBy(people, 'name') should sort
   // an array of people by their name.
   _.sortBy = function(collection, iterator) {
+    var reset; 
     _.each(collection, function (element, index) {
-          for (var i = index+1; i<collection.length; i++){ 
-            if (typeof iterator === "string") {  
-              if (element === 'undefined') {
-                collection.push(collection.splice(index,1))
-                index-1
-              } else if (collection[i].iterator < element.iterator){
-                collection.splice(index, 0, collection.splice(i,1)[0])
-                index-1
-              }
-            } else {
-              if (iterator(collection[i]) < iterator(collection[index])){
-                collection.splice(index, 0, collection.splice(i,1)[0])
-                index-1;
-              }
 
-            }  
-
+          if (element === undefined) {
+              collection.push(collection.splice(index,1)[0]);
           }
+            for (var i = index+1; i<collection.length; i++){ 
+              if (typeof iterator === "string" && iterator !== 'length') {  
+              
+                if (collection[i][iterator] < element[iterator]){
+                  collection.splice(index, 0, collection.splice(i,1)[0])
+                  reset=index;    
+                  index=i;
+                }
+              } else if(iterator === 'length'){
+                  if (collection[i].length < element.length){
+                  collection.splice(index, 0, collection.splice(i,1)[0])
+                  reset=index;    
+                  index=i;
+                }
+              }
+              else  {
+
+                if (iterator(collection[i]) < iterator(collection[index])){
+                  collection.splice(index, 0, collection.splice(i,1)[0])
+                  reset=index;    
+                  index=i;
+                }
+
+              }
+
+            }
+            index = reset;          
     })
     return collection;
   };
