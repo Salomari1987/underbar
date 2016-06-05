@@ -501,6 +501,16 @@
   // Take the difference between one array and a number of other arrays.
   // Only the elements present in just the first array will remain.
   _.difference = function(array) {
+    var newArray = [];
+    var args = [].slice.call(arguments,1);
+    _.each(array, function(element,index){
+      if (_.every(args, function(e,i){
+        return _.indexOf(e,element) === -1;
+      })){
+        newArray.push(element);
+      }
+    })
+    return newArray;
   };
 
   // Returns a function, that, when invoked, will only be triggered at most once
@@ -509,5 +519,14 @@
   //
   // Note: This is difficult! It may take a while to implement.
   _.throttle = function(func, wait) {
+    var callback = false;
+    return function(){
+      if (callback){
+        func();
+        callback = false;
+      }
+      setTimeout (function(){callback=true;}, wait)
+
+    }
   };
 }());
